@@ -11,13 +11,13 @@ data "aws_elb_service_account" "main" {
 # Security Groups
 #################
 resource "aws_security_group" "alb" {
-  name        = format("%s-%s-alb", var.name, var.type)
+  name        = var.name
   description = "Rules for application load balancer"
   vpc_id      = var.vpc_id
 
   tags = merge(
     {
-      Name = format("%s-%s-alb", var.name, var.type)
+      Name = var.name
     },
     var.tags,
   )
@@ -58,7 +58,7 @@ resource "aws_security_group_rule" "out-any-alb-to-webserver" {
 ##############
 resource "aws_lb" "application" {
   load_balancer_type   = "application"
-  name                 = format("%s-%s-alb", var.name, var.type)
+  name                 = var.name
   internal             = false
   security_groups      = [aws_security_group.alb.id]
   subnets              = var.subnet_ids
@@ -71,14 +71,14 @@ resource "aws_lb" "application" {
 
   tags = merge(
     {
-      Name = format("%s-%s-alb", var.name, var.type)
+      Name = var.name
     },
     var.tags,
   )
 }
 
 resource "aws_lb_target_group" "main" {
-  name                 = format("%s-%s-alb-target-group", var.name, var.type)
+  name                 = format("%s-target-group", var.name)
   vpc_id               = var.vpc_id
   port                 = var.target_group_port
   protocol             = "HTTP"
@@ -96,7 +96,7 @@ resource "aws_lb_target_group" "main" {
 
   tags = merge(
     {
-      Name = format("%s-%s-alb-target-group", var.name, var.type)
+      Name = format("%s-target-group", var.name)
     },
     var.tags,
   )
@@ -145,7 +145,7 @@ resource "aws_lb_listener" "frontend_https_tcp" {
 # S3 Access Logs
 ################
 resource "aws_s3_bucket" "alb_logs" {
-  bucket = format("%s-%s-alb", var.name, var.type)
+  bucket = var.name
   acl    = "private"
 
   lifecycle_rule {
@@ -169,7 +169,7 @@ resource "aws_s3_bucket" "alb_logs" {
 
   tags = merge(
     {
-      Name = format("%s-%s-alb", var.name, var.type)
+      Name = var.name
     },
     var.tags,
   )

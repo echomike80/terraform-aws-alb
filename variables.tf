@@ -151,11 +151,6 @@ variable "target_ids" {
   type        = list(string)
 }
 
-variable "type" {
-  description = "Type of the application server"
-  type        = string
-}
-
 variable "vpc_id" {
   description = "String of vpc id"
   type        = string

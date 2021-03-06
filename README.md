@@ -12,7 +12,6 @@ Terraform 0.12 and newer.
 module "loadbalancer" {
   source                            = "/path/to/module/terraform-aws-alb"
   name                              = var.name
-  type                              = "web"
   region                            = var.region
   vpc_cidr                          = var.vpc_cidr
   vpc_id                            = var.vpc_id
@@ -83,7 +82,6 @@ module "loadbalancer" {
 | target\_group\_health\_check\_unhealthy\_threshold | Unhealthy threshold of target group health check | `string` | `"2"` | no |
 | target\_group\_port | Port of target group | `string` | `"80"` | no |
 | target\_ids | A list of EC2 instance ids | `list(string)` | n/a | yes |
-| type | Type of the application server | `string` | n/a | yes |
 | vpc\_cidr | VPC cidr for security group rules | `string` | `"10.0.0.0/16"` | no |
 | vpc\_id | String of vpc id | `string` | n/a | yes |
 
