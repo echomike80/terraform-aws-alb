@@ -78,7 +78,7 @@ resource "aws_lb" "application" {
 }
 
 resource "aws_lb_target_group" "main" {
-  name                 = format("%s-target-group", var.name)
+  name                 = var.name
   vpc_id               = var.vpc_id
   port                 = var.target_group_port
   protocol             = "HTTP"
@@ -96,7 +96,7 @@ resource "aws_lb_target_group" "main" {
 
   tags = merge(
     {
-      Name = format("%s-target-group", var.name)
+      Name = var.name
     },
     var.tags,
   )

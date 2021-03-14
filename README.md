@@ -33,7 +33,6 @@ module "loadbalancer" {
 
   tags = {
     Environment = var.environment,
-    Project     = var.project,
     Tier        = var.web_tier
   }
 }
