@@ -10,15 +10,17 @@ Terraform 0.12 and newer.
 
 ```hcl
 module "loadbalancer" {
-  source                            = "/path/to/module/terraform-aws-alb"
-  name                              = var.name
-  region                            = var.region
-  vpc_cidr                          = var.vpc_cidr
-  vpc_id                            = var.vpc_id
-  subnet_ids                        = var.subnet_ids
-  target_ids                        = var.target_ids
-  ip_address_type                   = var.web_alb_ip_address_type
-  listener_certificate_arn          = var.listener_certificate_arn
+  source                                = "/path/to/module/terraform-aws-alb"
+  name                                  = var.name
+  region                                = var.region
+  vpc_cidr                              = var.vpc_cidr
+  vpc_id                                = var.vpc_id
+  subnet_ids                            = var.subnet_ids
+  target_ids                            = var.target_ids
+  ip_address_type                       = var.web_alb_ip_address_type
+  listener_https                        = true
+  listener_certificate_arn              = var.listener_certificate_arn
+  listener_additional_certificates_arns = var.listener_additional_certificates_arns
 
   sg_rules_ingress_cidr_map         = {
     internet_http = {
@@ -60,10 +62,12 @@ module "loadbalancer" {
 | access\_logs\_s3\_transition\_storage\_class | S3 storage class to transition access logs of Load Balancer after amount of days | `string` | `"STANDARD_IA"` | no |
 | enable\_any\_egress\_to\_vpc | Enable any egress traffic from Load Balancer instance to VPC | `bool` | `true` | no |
 | ip\_address\_type | IP address type of Load Balancer | `string` | `"ipv4"` | no |
+| listener\_additional\_certificates\_arns | List of SSL certificates of Load Balancer listener | `list(string)` | `[]` | no |
 | listener\_certificate\_arn | SSL certificate of Load Balancer listener | `string` | `null` | no |
 | listener\_http | Create listener for HTTP | `bool` | `true` | no |
-| listener\_http\_port | Port of http listener | `string` | `"80"` | no |
-| listener\_https\_port | Port of https listener | `string` | `"443"` | no |
+| listener\_http\_port | Port of HTTP listener | `string` | `"80"` | no |
+| listener\_https | Create listener for HTTPS | `bool` | `false` | no |
+| listener\_https\_port | Port of HTTPS listener | `string` | `"443"` | no |
 | listener\_ssl\_policy | SSL policy of Load Balancer listener | `string` | `"ELBSecurityPolicy-2016-08"` | no |
 | name | Name to be used on all resources as prefix | `string` | n/a | yes |
 | region | Name of region | `string` | n/a | yes |

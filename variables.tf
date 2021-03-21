@@ -34,14 +34,20 @@ variable "listener_http" {
   default     = true
 }
 
+variable "listener_https" {
+  description = "Create listener for HTTPS"
+  type        = bool
+  default     = false
+}
+
 variable "listener_http_port" {
-  description = "Port of http listener"
+  description = "Port of HTTP listener"
   type        = string
   default     = "80"
 }
 
 variable "listener_https_port" {
-  description = "Port of https listener"
+  description = "Port of HTTPS listener"
   type        = string
   default     = "443"
 }
@@ -56,6 +62,12 @@ variable "listener_certificate_arn" {
   description = "SSL certificate of Load Balancer listener"
   type        = string
   default     = null
+}
+
+variable "listener_additional_certificates_arns" {
+  description = "List of SSL certificates of Load Balancer listener"
+  type        = list(string)
+  default     = []
 }
 
 variable "name" {

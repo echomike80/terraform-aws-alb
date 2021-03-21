@@ -128,7 +128,7 @@ resource "aws_lb_listener" "frontend_http_tcp" {
 }
 
 resource "aws_lb_listener" "frontend_https_tcp" {
-  count             = var.listener_certificate_arn != null ? 1 : 0
+  count             = var.listener_https ? 1 : 0
   load_balancer_arn = aws_lb.application.arn
   port              = var.listener_https_port
   protocol          = "HTTPS"
@@ -139,6 +139,12 @@ resource "aws_lb_listener" "frontend_https_tcp" {
     type             = "forward"
     target_group_arn = aws_lb_target_group.main.arn
   }
+}
+
+resource "aws_lb_listener_certificate" "frontend_https_tcp" {
+  count             = var.listener_https && var.listener_additional_certificates_arns != null ? length(var.listener_additional_certificates_arns) : 0
+  listener_arn      = aws_lb_listener.frontend_https_tcp[0].arn
+  certificate_arn   = var.listener_additional_certificates_arns[count.index]
 }
 
 ################
