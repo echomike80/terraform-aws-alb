@@ -19,7 +19,7 @@ module "loadbalancer" {
   target_ids                            = var.target_ids
   target_group_port                     = "443"
   target_group_protocol                 = "HTTPS"
-  ip_address_type                       = var.web_alb_ip_address_type
+  ip_address_type                       = var.ip_address_type
   listener_https                        = true
   listener_certificate_arn              = var.listener_certificate_arn
   listener_additional_certificates_arns = var.listener_additional_certificates_arns
