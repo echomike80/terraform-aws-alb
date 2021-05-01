@@ -16,10 +16,34 @@ variable "access_logs_s3_transition_storage_class" {
   default     = "STANDARD_IA" # or "ONEZONE_IA"
 }
 
+variable "athena_access_logs_s3_db_name" {
+  description = "AWS Athena Database name for ALB access logging"
+  type        = string
+  default     = "alb_logs"
+}
+
+variable "athena_access_logs_s3_expiration_days" {
+  description = "Amount of days for expiration of S3 results of AWS Athena"
+  type        = number
+  default     = 30
+}
+
+variable "enable_athena_access_logs_s3" {
+  description = "Enable AWS Athena for ALB access logging analysis"
+  type        = bool
+  default     = false
+}
+
 variable "enable_any_egress_to_vpc" {
   description = "Enable any egress traffic from Load Balancer instance to VPC"
   type        = bool
   default     = true
+}
+
+variable "internal" {
+  type        = bool
+  default     = false
+  description = "A boolean flag to determine whether the Load Balancer should be internal"
 }
 
 variable "ip_address_type" {
@@ -156,6 +180,18 @@ variable "target_group_port" {
   description = "Port of target group"
   type        = string
   default     = "80"
+}
+
+variable "target_group_protocol" {
+  description = "Protocol of target group"
+  type        = string
+  default     = "HTTP"
+}
+
+variable "target_group_target_type" {
+  description = "Target type of target group"
+  type        = string
+  default     = "instance"
 }
 
 variable "target_ids" {

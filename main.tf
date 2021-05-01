@@ -57,12 +57,12 @@ resource "aws_security_group_rule" "out-any-alb-to-webserver" {
 # Loadbalancer
 ##############
 resource "aws_lb" "application" {
-  load_balancer_type   = "application"
-  name                 = var.name
-  internal             = false
-  security_groups      = [aws_security_group.alb.id]
-  subnets              = var.subnet_ids
-  ip_address_type      = var.ip_address_type
+  load_balancer_type    = "application"
+  name                  = var.name
+  internal              = var.internal
+  security_groups       = [aws_security_group.alb.id]
+  subnets               = var.subnet_ids
+  ip_address_type       = var.ip_address_type
 
   access_logs {
     bucket  = aws_s3_bucket.alb_logs.bucket
@@ -78,11 +78,11 @@ resource "aws_lb" "application" {
 }
 
 resource "aws_lb_target_group" "main" {
-  name                 = var.name
-  vpc_id               = var.vpc_id
-  port                 = var.target_group_port
-  protocol             = "HTTP"
-  target_type          = "instance"
+  name                  = var.name
+  vpc_id                = var.vpc_id
+  port                  = var.target_group_port
+  protocol              = var.target_group_protocol
+  target_type           = var.target_group_target_type
   health_check {
     interval            = var.target_group_health_check_interval
     path                = var.target_group_health_check_path
@@ -109,21 +109,26 @@ resource "aws_lb_target_group" "main" {
 }
 
 resource "aws_lb_target_group_attachment" "main_to_webserver" {
-  count            = length(var.target_ids)
-  target_group_arn = aws_lb_target_group.main.arn
-  target_id        = element(var.target_ids, count.index)
-  port             = var.target_group_port
+  count             = length(var.target_ids)
+  target_group_arn  = aws_lb_target_group.main.arn
+  target_id         = element(var.target_ids, count.index)
+  port              = var.target_group_port
 }
 
 resource "aws_lb_listener" "frontend_http_tcp" {
-  count              = var.listener_http ? 1 : 0
-  load_balancer_arn  = aws_lb.application.arn
-  port               = var.listener_http_port
-  protocol           = "HTTP"
+  count             = var.listener_http ? 1 : 0
+  load_balancer_arn = aws_lb.application.arn
+  port              = var.listener_http_port
+  protocol          = "HTTP"
 
   default_action {
-    target_group_arn = aws_lb_target_group.main.arn
-    type             = "forward"
+    type = "redirect"
+
+    redirect {
+      port        = "443"
+      protocol    = "HTTPS"
+      status_code = "HTTP_301"
+    }
   }
 }
 
@@ -232,4 +237,61 @@ resource "aws_s3_bucket_policy" "alb_logs" {
   ]
 }
 POLICY
+}
+
+###########################
+# Athena für S3 Access Logs
+###########################
+resource "aws_s3_bucket" "athena_results_alb_logs" {
+  count  = var.enable_athena_access_logs_s3 ? 1 : 0
+  bucket = format("%s-athena-results", var.name)
+  acl    = "private"
+
+  lifecycle_rule {
+    id      = "results"
+    enabled = true
+
+    tags = {
+      "rule"      = "results"
+      "autoclean" = "true"
+    }
+
+    expiration {
+      days = var.athena_access_logs_s3_expiration_days
+    }
+  }
+
+  tags = merge(
+    {
+      Name = format("%s-athena-results", var.name)
+    },
+    var.tags,
+  )
+}
+
+resource "aws_s3_bucket_public_access_block" "athena_results_alb_logs" {
+  count  = var.enable_athena_access_logs_s3 ? 1 : 0
+  bucket = aws_s3_bucket.athena_results_alb_logs[count.index].id
+
+  block_public_acls         = true
+  block_public_policy       = true
+  ignore_public_acls        = true
+  restrict_public_buckets   = true
+}
+
+resource "aws_athena_workgroup" "alb_logs" {
+  count = var.enable_athena_access_logs_s3 ? 1 : 0
+  name  = var.name
+
+  configuration {
+    result_configuration {
+      output_location = "s3://${aws_s3_bucket.athena_results_alb_logs[count.index].bucket}"
+    }
+  }
+}
+
+resource "aws_athena_database" "alb_logs" {
+  count  = var.enable_athena_access_logs_s3 ? 1 : 0
+  name   = var.athena_access_logs_s3_db_name
+  bucket = aws_s3_bucket.alb_logs.id
 }
