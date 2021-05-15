@@ -279,19 +279,8 @@ resource "aws_s3_bucket_public_access_block" "athena_results_alb_logs" {
   restrict_public_buckets   = true
 }
 
-resource "aws_athena_workgroup" "alb_logs" {
-  count = var.enable_athena_access_logs_s3 ? 1 : 0
-  name  = var.name
-
-  configuration {
-    result_configuration {
-      output_location = "s3://${aws_s3_bucket.athena_results_alb_logs[count.index].bucket}"
-    }
-  }
-}
-
 resource "aws_athena_database" "alb_logs" {
   count  = var.enable_athena_access_logs_s3 ? 1 : 0
   name   = var.athena_access_logs_s3_db_name
-  bucket = aws_s3_bucket.alb_logs.id
+  bucket = aws_s3_bucket.athena_results_alb_logs[count.index].id
 }
