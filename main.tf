@@ -11,13 +11,13 @@ data "aws_elb_service_account" "main" {
 # Security Groups
 #################
 resource "aws_security_group" "alb" {
-  name        = var.name
-  description = "Rules for application load balancer"
+  name        = var.sg_name == null ? var.name : var.sg_name
+  description = var.sg_description == null ? "Rules for application load balancer" : var.sg_description
   vpc_id      = var.vpc_id
 
   tags = merge(
     {
-      Name = var.name
+      Name = var.sg_name == null ? var.name : var.sg_name
     },
     var.tags,
   )
@@ -156,7 +156,7 @@ resource "aws_lb_listener_certificate" "frontend_https_tcp" {
 # S3 Access Logs
 ################
 resource "aws_s3_bucket" "alb_logs" {
-  bucket = var.name
+  bucket = var.access_logs_s3_bucket_name != null ? var.access_logs_s3_bucket_name : var.name
   acl    = "private"
 
   lifecycle_rule {

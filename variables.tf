@@ -1,3 +1,9 @@
+variable "access_logs_s3_bucket_name" {
+  description = "Name of the S3 bucket for access logs of Load Balancer"
+  type        = string
+  default     = null
+}
+
 variable "access_logs_s3_expiration_days" {
   description = "Amount of days for expiration of S3 access logs of Load Balancer"
   type        = number
@@ -102,6 +108,18 @@ variable "name" {
 variable "region" {
   description = "Name of region"
   type        = string
+}
+
+variable "sg_description" {
+  description = "Description to be used for security group"
+  type        = string
+  default     = null
+}
+
+variable "sg_name" {
+  description = "Name to be used for security group"
+  type        = string
+  default     = null
 }
 
 variable "sg_rules_egress_cidr_map" {
