@@ -89,47 +89,39 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_access_logs_s3_bucket_name"></a> [access\_logs\_s3\_bucket\_name](#input\_access\_logs\_s3\_bucket\_name) | Name of the S3 bucket for access logs of Load Balancer | 
-`string` | `null` | no |
+| <a name="input_access_logs_s3_bucket_name"></a> [access\_logs\_s3\_bucket\_name](#input\_access\_logs\_s3\_bucket\_name) | Name of the S3 bucket for access logs of Load Balancer | `string` | `null` | no |
 | <a name="input_access_logs_s3_expiration_days"></a> [access\_logs\_s3\_expiration\_days](#input\_access\_logs\_s3\_expiration\_days) | Amount of days for expiration of S3 access logs of Load Balancer | `number` | `90` | no |
 | <a name="input_access_logs_s3_transition_days"></a> [access\_logs\_s3\_transition\_days](#input\_access\_logs\_s3\_transition\_days) | Amount of days for S3 storage class to transition of access logs of Load Balancer | `number` | `30` | no |
 | <a name="input_access_logs_s3_transition_storage_class"></a> [access\_logs\_s3\_transition\_storage\_class](#input\_access\_logs\_s3\_transition\_storage\_class) | S3 storage class to transition access logs of Load Balancer after amount of days | `string` | `"STANDARD_IA"` | no |
 | <a name="input_athena_access_logs_s3_db_name"></a> [athena\_access\_logs\_s3\_db\_name](#input\_athena\_access\_logs\_s3\_db\_name) | AWS Athena Database name for ALB access logging | `string` | `"alb_logs"` | no |
 | <a name="input_athena_access_logs_s3_expiration_days"></a> [athena\_access\_logs\_s3\_expiration\_days](#input\_athena\_access\_logs\_s3\_expiration\_days) | Amount of days for expiration of S3 results of AWS Athena | `number` | `30` | no |
-| <a name="input_enable_any_egress_to_vpc"></a> [enable\_any\_egress\_to\_vpc](#input\_enable\_any\_egress\_to\_vpc) | Enable any egress traffic from Load Balancer instance to VPC | 
-`bool` | `true` | no |
+| <a name="input_enable_any_egress_to_vpc"></a> [enable\_any\_egress\_to\_vpc](#input\_enable\_any\_egress\_to\_vpc) | Enable any egress traffic from Load Balancer instance to VPC | `bool` | `true` | no |
 | <a name="input_enable_athena_access_logs_s3"></a> [enable\_athena\_access\_logs\_s3](#input\_enable\_athena\_access\_logs\_s3) | Enable AWS Athena for ALB access logging analysis | `bool` | `false` | no |
 | <a name="input_internal"></a> [internal](#input\_internal) | A boolean flag to determine whether the Load Balancer should be internal | `bool` | `false` | no |
 | <a name="input_ip_address_type"></a> [ip\_address\_type](#input\_ip\_address\_type) | IP address type of Load Balancer | `string` | `"ipv4"` | no |
 | <a name="input_listener_additional_certificates_arns"></a> [listener\_additional\_certificates\_arns](#input\_listener\_additional\_certificates\_arns) | List of SSL certificates of Load Balancer listener | `list(string)` | `[]` | no |
-| <a name="input_listener_certificate_arn"></a> [listener\_certificate\_arn](#input\_listener\_certificate\_arn) | SSL certificate of Load Balancer listener | `string` | `null` | no 
-|
+| <a name="input_listener_certificate_arn"></a> [listener\_certificate\_arn](#input\_listener\_certificate\_arn) | SSL certificate of Load Balancer listener | `string` | `null` | no |
 | <a name="input_listener_http"></a> [listener\_http](#input\_listener\_http) | Create listener for HTTP | `bool` | `true` | no |
 | <a name="input_listener_http_port"></a> [listener\_http\_port](#input\_listener\_http\_port) | Port of HTTP listener | `string` | `"80"` | no |
 | <a name="input_listener_https"></a> [listener\_https](#input\_listener\_https) | Create listener for HTTPS | `bool` | `false` | no |
 | <a name="input_listener_https_port"></a> [listener\_https\_port](#input\_listener\_https\_port) | Port of HTTPS listener | `string` | `"443"` | no |
-| <a name="input_listener_ssl_policy"></a> [listener\_ssl\_policy](#input\_listener\_ssl\_policy) | SSL policy of Load Balancer listener | `string` | `"ELBSecurityPolicy-2016-08"` | 
-no |
+| <a name="input_listener_ssl_policy"></a> [listener\_ssl\_policy](#input\_listener\_ssl\_policy) | SSL policy of Load Balancer listener | `string` | `"ELBSecurityPolicy-2016-08"` | no |
 | <a name="input_name"></a> [name](#input\_name) | Name to be used on all resources as prefix | `string` | n/a | yes |
 | <a name="input_region"></a> [region](#input\_region) | Name of region | `string` | n/a | yes |
 | <a name="input_sg_description"></a> [sg\_description](#input\_sg\_description) | Description to be used for security group | `string` | `null` | no |
 | <a name="input_sg_name"></a> [sg\_name](#input\_sg\_name) | Name to be used for security group | `string` | `null` | no |
-| <a name="input_sg_rules_egress_cidr_map"></a> [sg\_rules\_egress\_cidr\_map](#input\_sg\_rules\_egress\_cidr\_map) | Map of security group rules for egress communication of cidr | 
-`map` | `{}` | no |
+| <a name="input_sg_rules_egress_cidr_map"></a> [sg\_rules\_egress\_cidr\_map](#input\_sg\_rules\_egress\_cidr\_map) | Map of security group rules for egress communication of cidr | `map` | `{}` | no |
 | <a name="input_sg_rules_ingress_cidr_map"></a> [sg\_rules\_ingress\_cidr\_map](#input\_sg\_rules\_ingress\_cidr\_map) | Map of security group rules for ingress communication of cidr | `map` | `{}` | no |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | A list of VPC Subnet IDs to launch in | `list(string)` | `[]` | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | A mapping of tags to assign to the resource | `map(string)` | `{}` | no |
 | <a name="input_target_group_health_check_healthy_threshold"></a> [target\_group\_health\_check\_healthy\_threshold](#input\_target\_group\_health\_check\_healthy\_threshold) | Healthy threshold of target group health check | `string` | `"3"` | no |
 | <a name="input_target_group_health_check_interval"></a> [target\_group\_health\_check\_interval](#input\_target\_group\_health\_check\_interval) | Interval of target group health check | `string` | `"30"` | no |
 | <a name="input_target_group_health_check_matcher"></a> [target\_group\_health\_check\_matcher](#input\_target\_group\_health\_check\_matcher) | Matcher of target group health check | `string` | `"200"` | no |
-| <a name="input_target_group_health_check_path"></a> [target\_group\_health\_check\_path](#input\_target\_group\_health\_check\_path) | Path of target group health check | `string` 
-| `"/"` | no |
-| <a name="input_target_group_health_check_port"></a> [target\_group\_health\_check\_port](#input\_target\_group\_health\_check\_port) | Port of target group health check | `string` 
-| `"80"` | no |
+| <a name="input_target_group_health_check_path"></a> [target\_group\_health\_check\_path](#input\_target\_group\_health\_check\_path) | Path of target group health check | `string` | `"/"` | no |
+| <a name="input_target_group_health_check_port"></a> [target\_group\_health\_check\_port](#input\_target\_group\_health\_check\_port) | Port of target group health check | `string` | `"80"` | no |
 | <a name="input_target_group_health_check_protocol"></a> [target\_group\_health\_check\_protocol](#input\_target\_group\_health\_check\_protocol) | Protocol of target group health check | `string` | `"HTTP"` | no |
 | <a name="input_target_group_health_check_timeout"></a> [target\_group\_health\_check\_timeout](#input\_target\_group\_health\_check\_timeout) | Timeout of target group health check | `string` | `"5"` | no |
-| <a name="input_target_group_health_check_unhealthy_threshold"></a> [target\_group\_health\_check\_unhealthy\_threshold](#input\_target\_group\_health\_check\_unhealthy\_threshold) 
-| Unhealthy threshold of target group health check | `string` | `"2"` | no |
+| <a name="input_target_group_health_check_unhealthy_threshold"></a> [target\_group\_health\_check\_unhealthy\_threshold](#input\_target\_group\_health\_check\_unhealthy\_threshold) | Unhealthy threshold of target group health check | `string` | `"2"` | no |
 | <a name="input_target_group_port"></a> [target\_group\_port](#input\_target\_group\_port) | Port of target group | `string` | `"80"` | no |
 | <a name="input_target_group_protocol"></a> [target\_group\_protocol](#input\_target\_group\_protocol) | Protocol of target group | `string` | `"HTTP"` | no |
 | <a name="input_target_group_target_type"></a> [target\_group\_target\_type](#input\_target\_group\_target\_type) | Target type of target group | `string` | `"instance"` | no |     
