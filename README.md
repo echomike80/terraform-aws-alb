@@ -19,12 +19,16 @@ module "loadbalancer" {
   target_ids                            = var.target_ids
   target_group_port                     = "443"
   target_group_protocol                 = "HTTPS"
+  target_group_stickiness_enabled       = var.target_group_stickiness_enabled
+  target_group_stickiness_type          = var.target_group_stickiness_type
+
   ip_address_type                       = var.ip_address_type
-  listener_https                        = true
+
+  listener_https                        = var.listener_https
   listener_certificate_arn              = var.listener_certificate_arn
   listener_additional_certificates_arns = var.listener_additional_certificates_arns
 
-  enable_athena_access_logs_s3          = true
+  enable_athena_access_logs_s3          = var.enable_athena_access_logs_s3
   athena_access_logs_s3_db_name         = var.athena_access_logs_s3_db_name
 
   sg_rules_ingress_cidr_map         = {
@@ -97,6 +101,7 @@ No modules.
 | <a name="input_athena_access_logs_s3_expiration_days"></a> [athena\_access\_logs\_s3\_expiration\_days](#input\_athena\_access\_logs\_s3\_expiration\_days) | Amount of days for expiration of S3 results of AWS Athena | `number` | `30` | no |
 | <a name="input_enable_any_egress_to_vpc"></a> [enable\_any\_egress\_to\_vpc](#input\_enable\_any\_egress\_to\_vpc) | Enable any egress traffic from Load Balancer instance to VPC | `bool` | `true` | no |
 | <a name="input_enable_athena_access_logs_s3"></a> [enable\_athena\_access\_logs\_s3](#input\_enable\_athena\_access\_logs\_s3) | Enable AWS Athena for ALB access logging analysis | `bool` | `false` | no |
+| <a name="input_idle_timeout"></a> [idle\_timeout](#input\_idle\_timeout) | The time in seconds that the connection is allowed to be idle | `number` | `60` | no |
 | <a name="input_internal"></a> [internal](#input\_internal) | A boolean flag to determine whether the Load Balancer should be internal | `bool` | `false` | no |
 | <a name="input_ip_address_type"></a> [ip\_address\_type](#input\_ip\_address\_type) | IP address type of Load Balancer | `string` | `"ipv4"` | no |
 | <a name="input_listener_additional_certificates_arns"></a> [listener\_additional\_certificates\_arns](#input\_listener\_additional\_certificates\_arns) | List of SSL certificates of Load Balancer listener | `list(string)` | `[]` | no |
@@ -124,6 +129,9 @@ No modules.
 | <a name="input_target_group_health_check_unhealthy_threshold"></a> [target\_group\_health\_check\_unhealthy\_threshold](#input\_target\_group\_health\_check\_unhealthy\_threshold) | Unhealthy threshold of target group health check | `string` | `"2"` | no |
 | <a name="input_target_group_port"></a> [target\_group\_port](#input\_target\_group\_port) | Port of target group | `string` | `"80"` | no |
 | <a name="input_target_group_protocol"></a> [target\_group\_protocol](#input\_target\_group\_protocol) | Protocol of target group | `string` | `"HTTP"` | no |
+| <a name="input_target_group_stickiness_cookie_duration"></a> [target\_group\_stickiness\_cookie\_duration](#input\_target\_group\_stickiness\_cookie\_duration) | The time period, in seconds, during which requests from a client should be routed to the same target | `string` | `"86400"` | no |
+| <a name="input_target_group_stickiness_enabled"></a> [target\_group\_stickiness\_enabled](#input\_target\_group\_stickiness\_enabled) | Boolean to enable / disable stickiness. Default is true. | `bool` | `false` | no |
+| <a name="input_target_group_stickiness_type"></a> [target\_group\_stickiness\_type](#input\_target\_group\_stickiness\_type) | The type of sticky sessions. The only current possible values are lb\_cookie, app\_cookie for ALBs, and source\_ip for NLBs. | `string` | `"lb_cookie"` | no |
 | <a name="input_target_group_target_type"></a> [target\_group\_target\_type](#input\_target\_group\_target\_type) | Target type of target group | `string` | `"instance"` | no |     
 | <a name="input_target_ids"></a> [target\_ids](#input\_target\_ids) | A list of EC2 instance ids | `list(string)` | n/a | yes |
 | <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | VPC cidr for security group rules | `string` | `"10.0.0.0/16"` | no |

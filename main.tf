@@ -64,6 +64,8 @@ resource "aws_lb" "application" {
   subnets               = var.subnet_ids
   ip_address_type       = var.ip_address_type
 
+  idle_timeout          = var.idle_timeout
+
   access_logs {
     bucket  = aws_s3_bucket.alb_logs.bucket
     enabled = true
@@ -92,6 +94,13 @@ resource "aws_lb_target_group" "main" {
     timeout             = var.target_group_health_check_timeout
     protocol            = var.target_group_health_check_protocol
     matcher             = var.target_group_health_check_matcher
+  }
+  stickiness {
+    cookie_duration     = var.target_group_stickiness_cookie_duration
+    ## issue: An argument named "cookie_name" is not expected here.
+    # cookie_name         = var.target_group_stickiness_cookie_name
+    enabled             = var.target_group_stickiness_enabled
+    type                = var.target_group_stickiness_type
   }
 
   tags = merge(

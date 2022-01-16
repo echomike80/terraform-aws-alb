@@ -46,6 +46,12 @@ variable "enable_any_egress_to_vpc" {
   default     = true
 }
 
+variable "idle_timeout" {
+  description = "The time in seconds that the connection is allowed to be idle"
+  type        = number
+  default     = 60
+}
+
 variable "internal" {
   type        = bool
   default     = false
@@ -192,6 +198,31 @@ variable "target_group_health_check_matcher" {
   description = "Matcher of target group health check"
   type        = string
   default     = "200"
+}
+
+variable "target_group_stickiness_cookie_duration" {
+  description = " The time period, in seconds, during which requests from a client should be routed to the same target"
+  type        = string
+  default     = "86400"
+}
+
+## issue: An argument named "cookie_name" is not expected here.
+# variable "target_group_stickiness_cookie_name" {
+#   description = "Name of the application based cookie. AWSALB, AWSALBAPP, and AWSALBTG prefixes are reserved and cannot be used."
+#   type        = string
+#   default     = null
+# }
+
+variable "target_group_stickiness_enabled" {
+  description = "Boolean to enable / disable stickiness. Default is true."
+  type        = bool
+  default     = false
+}
+
+variable "target_group_stickiness_type" {
+  description = "The type of sticky sessions. The only current possible values are lb_cookie, app_cookie for ALBs, and source_ip for NLBs."
+  type        = string
+  default     = "lb_cookie"
 }
 
 variable "target_group_port" {
