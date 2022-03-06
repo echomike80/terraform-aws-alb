@@ -81,8 +81,7 @@ No modules.
 | [aws_s3_bucket.athena_results_alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket_policy.alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_s3_bucket_public_access_block.alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
-| [aws_s3_bucket_public_access_block.athena_results_alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
-| [aws_security_group.alb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
+| [aws_s3_bucket_public_access_block.athena_results_alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource || [aws_security_group.alb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_security_group_rule.in-each-port-alb-from-cidr](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [aws_security_group_rule.out-any-alb-to-webserver](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [aws_security_group_rule.out-each-port-alb-to-cidr](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
@@ -132,7 +131,7 @@ No modules.
 | <a name="input_target_group_stickiness_cookie_duration"></a> [target\_group\_stickiness\_cookie\_duration](#input\_target\_group\_stickiness\_cookie\_duration) | The time period, in seconds, during which requests from a client should be routed to the same target | `string` | `"86400"` | no |
 | <a name="input_target_group_stickiness_enabled"></a> [target\_group\_stickiness\_enabled](#input\_target\_group\_stickiness\_enabled) | Boolean to enable / disable stickiness. Default is true. | `bool` | `false` | no |
 | <a name="input_target_group_stickiness_type"></a> [target\_group\_stickiness\_type](#input\_target\_group\_stickiness\_type) | The type of sticky sessions. The only current possible values are lb\_cookie, app\_cookie for ALBs, and source\_ip for NLBs. | `string` | `"lb_cookie"` | no |
-| <a name="input_target_group_target_type"></a> [target\_group\_target\_type](#input\_target\_group\_target\_type) | Target type of target group | `string` | `"instance"` | no |     
+| <a name="input_target_group_target_type"></a> [target\_group\_target\_type](#input\_target\_group\_target\_type) | Target type of target group | `string` | `"instance"` | no |
 | <a name="input_target_ids"></a> [target\_ids](#input\_target\_ids) | A list of EC2 instance ids | `list(string)` | n/a | yes |
 | <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | VPC cidr for security group rules | `string` | `"10.0.0.0/16"` | no |
 | <a name="input_vpc_id"></a> [vpc\_id](#input\_vpc\_id) | String of vpc id | `string` | n/a | yes |
@@ -141,6 +140,7 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_arn_alb"></a> [arn\_alb](#output\_arn\_alb) | ARN of application load balancer |
 | <a name="output_dns_name_alb"></a> [dns\_name\_alb](#output\_dns\_name\_alb) | DNS Name of application load balancer |
 | <a name="output_name_alb"></a> [name\_alb](#output\_name\_alb) | Name of application load balancer |
 | <a name="output_security_group_id_alb"></a> [security\_group\_id\_alb](#output\_security\_group\_id\_alb) | ID of security group to use for the application load balancer |
