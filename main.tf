@@ -64,6 +64,9 @@ resource "aws_lb" "application" {
   subnets               = var.subnet_ids
   ip_address_type       = var.ip_address_type
 
+  enable_deletion_protection    = var.deletion_protection_enabled
+  drop_invalid_header_fields    = var.drop_invalid_header_fields_enabled
+
   idle_timeout          = var.idle_timeout
 
   access_logs {
@@ -166,26 +169,6 @@ resource "aws_lb_listener_certificate" "frontend_https_tcp" {
 ################
 resource "aws_s3_bucket" "alb_logs" {
   bucket = var.access_logs_s3_bucket_name != null ? var.access_logs_s3_bucket_name : var.name
-  acl    = "private"
-
-  lifecycle_rule {
-    id      = "log"
-    enabled = true
-
-    tags = {
-      "rule"      = "log"
-      "autoclean" = "true"
-    }
-
-    transition {
-      days          = var.access_logs_s3_transition_days
-      storage_class = var.access_logs_s3_transition_storage_class
-    }
-
-    expiration {
-      days = var.access_logs_s3_expiration_days
-    }
-  }
 
   tags = merge(
     {
@@ -202,6 +185,41 @@ resource "aws_s3_bucket_public_access_block" "alb_logs" {
   block_public_policy       = true
   ignore_public_acls        = true
   restrict_public_buckets   = true
+}
+
+resource "aws_s3_bucket_acl" "alb_logs" {
+  bucket = aws_s3_bucket.alb_logs.id
+  
+  acl   = "private"
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "alb_logs" {
+  bucket = aws_s3_bucket.alb_logs.id
+
+  rule {
+    id      = "log"
+
+    transition {
+      days          = var.access_logs_s3_transition_days
+      storage_class = var.access_logs_s3_transition_storage_class
+    }
+
+    expiration {
+      days = var.access_logs_s3_expiration_days
+    }
+
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "alb_logs" {
+  bucket = aws_s3_bucket.alb_logs.id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "aws:kms"
+    }
+  }
 }
 
 # sources:
@@ -253,22 +271,7 @@ POLICY
 ###########################
 resource "aws_s3_bucket" "athena_results_alb_logs" {
   count  = var.enable_athena_access_logs_s3 ? 1 : 0
-  bucket = format("%s-athena-results", var.name)
-  acl    = "private"
-
-  lifecycle_rule {
-    id      = "results"
-    enabled = true
-
-    tags = {
-      "rule"      = "results"
-      "autoclean" = "true"
-    }
-
-    expiration {
-      days = var.athena_access_logs_s3_expiration_days
-    }
-  }
+  bucket = var.athena_access_logs_s3_bucket_name != null ? var.athena_access_logs_s3_bucket_name : format("%s-athena-results", var.name)
 
   tags = merge(
     {
@@ -288,8 +291,45 @@ resource "aws_s3_bucket_public_access_block" "athena_results_alb_logs" {
   restrict_public_buckets   = true
 }
 
+resource "aws_s3_bucket_acl" "athena_results_alb_logs" {
+  count  = var.enable_athena_access_logs_s3 ? 1 : 0
+  bucket = aws_s3_bucket.athena_results_alb_logs[count.index].id
+  
+  acl   = "private"
+}
+
+resource "aws_s3_bucket_lifecycle_configuration" "athena_results_alb_logs" {
+  count  = var.enable_athena_access_logs_s3 ? 1 : 0
+  bucket = aws_s3_bucket.athena_results_alb_logs[count.index].id
+
+  rule {
+    id      = "results"
+
+    expiration {
+      days  = var.athena_access_logs_s3_expiration_days
+    }
+
+    status = "Enabled"
+  }
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "athena_results_alb_logs" {
+  count  = var.enable_athena_access_logs_s3 ? 1 : 0
+  bucket = aws_s3_bucket.athena_results_alb_logs[count.index].id
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm     = "aws:kms"
+    }
+  }
+}
+
 resource "aws_athena_database" "alb_logs" {
   count  = var.enable_athena_access_logs_s3 ? 1 : 0
   name   = var.athena_access_logs_s3_db_name
   bucket = aws_s3_bucket.athena_results_alb_logs[count.index].id
+
+  encryption_configuration {
+     encryption_option = "SSE_S3"
+  }
 }

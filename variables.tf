@@ -22,6 +22,12 @@ variable "access_logs_s3_transition_storage_class" {
   default     = "STANDARD_IA" # or "ONEZONE_IA"
 }
 
+variable "athena_access_logs_s3_bucket_name" {
+  description = "AWS Athena S3 bucket name for ALB access logging"
+  type        = string
+  default     = null
+}
+
 variable "athena_access_logs_s3_db_name" {
   description = "AWS Athena Database name for ALB access logging"
   type        = string
@@ -32,6 +38,18 @@ variable "athena_access_logs_s3_expiration_days" {
   description = "Amount of days for expiration of S3 results of AWS Athena"
   type        = number
   default     = 30
+}
+
+variable "deletion_protection_enabled" {
+  description = "A boolean flag to enable/disable deletion protection for Load Balancer"
+  type        = bool
+  default     = false
+}
+
+variable "drop_invalid_header_fields_enabled" {
+  description = "A boolean flag to enable/disable drop invalid header fields for Load Balancer"
+  type        = bool
+  default     = false
 }
 
 variable "enable_athena_access_logs_s3" {

@@ -79,9 +79,16 @@ No modules.
 | [aws_lb_target_group_attachment.main_to_webserver](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lb_target_group_attachment) | resource |
 | [aws_s3_bucket.alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket.athena_results_alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
+| [aws_s3_bucket_acl.alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) | resource |
+| [aws_s3_bucket_acl.athena_results_alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) | resource |
+| [aws_s3_bucket_lifecycle_configuration.alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration) | resource |
+| [aws_s3_bucket_lifecycle_configuration.athena_results_alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_lifecycle_configuration) | resource |        
 | [aws_s3_bucket_policy.alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
 | [aws_s3_bucket_public_access_block.alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
-| [aws_s3_bucket_public_access_block.athena_results_alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource || [aws_security_group.alb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
+| [aws_s3_bucket_public_access_block.athena_results_alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
+| [aws_s3_bucket_server_side_encryption_configuration.alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
+| [aws_s3_bucket_server_side_encryption_configuration.athena_results_alb_logs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
+| [aws_security_group.alb](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
 | [aws_security_group_rule.in-each-port-alb-from-cidr](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [aws_security_group_rule.out-any-alb-to-webserver](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
 | [aws_security_group_rule.out-each-port-alb-to-cidr](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group_rule) | resource |
@@ -96,8 +103,11 @@ No modules.
 | <a name="input_access_logs_s3_expiration_days"></a> [access\_logs\_s3\_expiration\_days](#input\_access\_logs\_s3\_expiration\_days) | Amount of days for expiration of S3 access logs of Load Balancer | `number` | `90` | no |
 | <a name="input_access_logs_s3_transition_days"></a> [access\_logs\_s3\_transition\_days](#input\_access\_logs\_s3\_transition\_days) | Amount of days for S3 storage class to transition of access logs of Load Balancer | `number` | `30` | no |
 | <a name="input_access_logs_s3_transition_storage_class"></a> [access\_logs\_s3\_transition\_storage\_class](#input\_access\_logs\_s3\_transition\_storage\_class) | S3 storage class to transition access logs of Load Balancer after amount of days | `string` | `"STANDARD_IA"` | no |
+| <a name="input_athena_access_logs_s3_bucket_name"></a> [athena\_access\_logs\_s3\_bucket\_name](#input\_athena\_access\_logs\_s3\_bucket\_name) | AWS Athena S3 bucket name for ALB access logging | `string` | `null` | no |
 | <a name="input_athena_access_logs_s3_db_name"></a> [athena\_access\_logs\_s3\_db\_name](#input\_athena\_access\_logs\_s3\_db\_name) | AWS Athena Database name for ALB access logging | `string` | `"alb_logs"` | no |
 | <a name="input_athena_access_logs_s3_expiration_days"></a> [athena\_access\_logs\_s3\_expiration\_days](#input\_athena\_access\_logs\_s3\_expiration\_days) | Amount of days for expiration of S3 results of AWS Athena | `number` | `30` | no |
+| <a name="input_deletion_protection_enabled"></a> [deletion\_protection\_enabled](#input\_deletion\_protection\_enabled) | A boolean flag to enable/disable deletion protection for Load Balancer | `bool` | `false` | no |
+| <a name="input_drop_invalid_header_fields_enabled"></a> [drop\_invalid\_header\_fields\_enabled](#input\_drop\_invalid\_header\_fields\_enabled) | A boolean flag to enable/disable drop invalid header fields for Load Balancer | `bool` | `false` | no |
 | <a name="input_enable_any_egress_to_vpc"></a> [enable\_any\_egress\_to\_vpc](#input\_enable\_any\_egress\_to\_vpc) | Enable any egress traffic from Load Balancer instance to VPC | `bool` | `true` | no |
 | <a name="input_enable_athena_access_logs_s3"></a> [enable\_athena\_access\_logs\_s3](#input\_enable\_athena\_access\_logs\_s3) | Enable AWS Athena for ALB access logging analysis | `bool` | `false` | no |
 | <a name="input_idle_timeout"></a> [idle\_timeout](#input\_idle\_timeout) | The time in seconds that the connection is allowed to be idle | `number` | `60` | no |
@@ -122,8 +132,7 @@ No modules.
 | <a name="input_target_group_health_check_interval"></a> [target\_group\_health\_check\_interval](#input\_target\_group\_health\_check\_interval) | Interval of target group health check | `string` | `"30"` | no |
 | <a name="input_target_group_health_check_matcher"></a> [target\_group\_health\_check\_matcher](#input\_target\_group\_health\_check\_matcher) | Matcher of target group health check | `string` | `"200"` | no |
 | <a name="input_target_group_health_check_path"></a> [target\_group\_health\_check\_path](#input\_target\_group\_health\_check\_path) | Path of target group health check | `string` | `"/"` | no |
-| <a name="input_target_group_health_check_port"></a> [target\_group\_health\_check\_port](#input\_target\_group\_health\_check\_port) | Port of target group health check | `string` | `"80"` | no |
-| <a name="input_target_group_health_check_protocol"></a> [target\_group\_health\_check\_protocol](#input\_target\_group\_health\_check\_protocol) | Protocol of target group health check | `string` | `"HTTP"` | no |
+| <a name="input_target_group_health_check_port"></a> [target\_group\_health\_check\_port](#input\_target\_group\_health\_check\_port) | Port of target group health check | `string` | `"80"` | no || <a name="input_target_group_health_check_protocol"></a> [target\_group\_health\_check\_protocol](#input\_target\_group\_health\_check\_protocol) | Protocol of target group health check | `string` | `"HTTP"` | no |
 | <a name="input_target_group_health_check_timeout"></a> [target\_group\_health\_check\_timeout](#input\_target\_group\_health\_check\_timeout) | Timeout of target group health check | `string` | `"5"` | no |
 | <a name="input_target_group_health_check_unhealthy_threshold"></a> [target\_group\_health\_check\_unhealthy\_threshold](#input\_target\_group\_health\_check\_unhealthy\_threshold) | Unhealthy threshold of target group health check | `string` | `"2"` | no |
 | <a name="input_target_group_port"></a> [target\_group\_port](#input\_target\_group\_port) | Port of target group | `string` | `"80"` | no |
